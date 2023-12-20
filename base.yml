@@ -1,0 +1,8 @@
+- hosts: localhost
+  vars:
+    ansible_user: "arne"
+  tasks:
+    - include: tasks/baseApps.yml
+    - include: tasks/flatpak.yml
+    - include: tasks/sway.yml
+    - include: tasks/golang.yml

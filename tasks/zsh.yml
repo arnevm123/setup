@@ -1,0 +1,70 @@
+- name: Install ZSH
+  become: true
+  ansible.builtin.package:
+    name: zsh
+    state: present
+  changed_when: false
+  tags: &tags_for_zsh_tasks ['install', 'productivity', 'dotfiles', 'zsh']
+
+- name: Change shell to zsh for current user
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    shell: "{{ lookup('pipe', 'which zsh') }}"
+
+- name: Check that the oh my zsh folder exists
+  ansible.builtin.stat:
+    path: ~/.oh-my-zsh
+  register: ohmyzsh_dir
+  changed_when: false
+  tags: *tags_for_zsh_tasks
+
+- name: Download Oh My Zsh installation script
+  when: not ohmyzsh_dir.stat.exists
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    dest: /tmp/install-oh-my-zsh.sh
+    mode: 'u+x'
+
+- name: Run Oh My Zsh installation script
+  when: not ohmyzsh_dir.stat.exists
+  ansible.builtin.script: /tmp/install-oh-my-zsh.sh --unattended
+
+- name: Install zsh-autosuggestions
+  when: not ohmyzsh_dir.stat.exists
+  ansible.builtin.git:
+    repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
+    dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
+    force: true
+  tags: *tags_for_zsh_tasks
+
+- name: Install zsh-z
+  when: not ohmyzsh_dir.stat.exists
+  ansible.builtin.git:
+    repo: 'https://github.com/agkozak/zsh-z'
+    dest: "~/.oh-my-zsh/plugins/zsh-z"
+    force: true
+  tags: *tags_for_zsh_tasks
+
+- name: Install omz-git
+  when: not ohmyzsh_dir.stat.exists
+  ansible.builtin.git:
+    repo: 'https://github.com/tnwinc/omz-git.git'
+    dest: "~/.oh-my-zsh/plugins/omz-git"
+    force: true
+  tags: *tags_for_zsh_tasks
+
+- name: Install zsh-autosuggestions
+  when: not ohmyzsh_dir.stat.exists
+  ansible.builtin.git:
+    repo: 'https://github.com/tnwinc/omz-git.git'
+    dest: "~/.oh-my-zsh/plugins/omz-git"
+    force: true
+  tags: *tags_for_zsh_tasks
+
+- name: Install zsh apikeys
+  ansible.builtin.copy:
+    src: "{{ source_api }}"
+    dest: "{{ dest_api }}"
+    mode: '0600'
+  tags: *tags_for_zsh_tasks

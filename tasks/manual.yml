@@ -1,0 +1,34 @@
+- name: Clone the keyd repository
+  become: true
+  git:
+    repo: https://github.com/rvaiya/keyd
+    dest: /opt/keyd
+    version: master
+
+- name: Make keyd trusted
+  ansible.builtin.command: >
+    git config --global --add safe.directory /opt/keyd
+
+- name: Compile and install keyd
+  become: true
+  ansible.builtin.command: sudo make
+  args:
+    chdir: /opt/keyd
+
+- name: Compile and install keyd
+  become: true
+  ansible.builtin.command: sudo make install
+  args:
+    chdir: /opt/keyd
+
+- name: Enable and start keyd service
+  become: true
+  ansible.builtin.systemd:
+    name: keyd
+    state: started
+    enabled: true
+
+- name: setup my config
+  become: true
+  ansible.builtin.command: sudo cp /home/{{ ansible_user}}/dotfiles/keyd/default.conf /etc/keyd/default.conf
+

@@ -1,0 +1,43 @@
+- hosts: localhost
+  vars:
+    source_key: "./.ssh/id_rsa"
+    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
+    source_key_work: "./.ssh/id_work"
+    dest_key_work: "{{ lookup('env', 'HOME') }}/.ssh/id_work"
+    source_api: "./.zshexports"
+    dest_api: "{{ lookup('env', 'HOME') }}/.zshexports"
+    ansible_user: "arne"
+  tasks:
+    - name: Update and upgrade packages
+      become: true
+      when: "ansible_pkg_mgr != 'apt'"
+      ansible.builtin.package:
+        name: "*"
+        state: latest
+        update_cache: yes
+    # - name: Update and upgrade packages on Arch Linux, Ubuntu, and Fedora
+    #   become: true
+    #   vars:
+    #     package_manager: "{{ ansible_pkg_mgr }}"
+    #     update_command: "{{
+    #         'pacman -Syu --noconfirm' if package_manager == 'pacman'
+    #         else 'apt update && apt upgrade -y' if package_manager == 'apt'
+    #         else 'dnf update -y' if package_manager == 'dnf'
+    #         else ''
+    #       }}"
+    #  command: "{{ update_command }}"
+    - name: Include Arch tasks
+      include_tasks: tasks/arch.yml
+      when: "ansible_pkg_mgr == 'pacman'"
+    - name: Include Apt tasks
+      include_tasks: tasks/apt.yml
+      when: "ansible_pkg_mgr == 'apt'"
+    - include: tasks/ssh.yml
+    - include: tasks/zsh.yml
+    - include: tasks/git.yml
+    - include: tasks/baseApps.yml
+    - include: tasks/flatpak.yml
+    - include: tasks/sway.yml
+    - include: tasks/dotfiles.yml
+    - include: tasks/manual.yml
+    - include: tasks/golang.yml

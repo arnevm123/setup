@@ -1,0 +1,6 @@
+- name: Install applications used for sway setup 3
+  become: true
+  ansible.builtin.package:
+    name:
+      - i3
+      - dunst

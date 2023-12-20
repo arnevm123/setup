@@ -1,0 +1,57 @@
+- name: Install applications used for sway setup 1
+  become: true
+  ansible.builtin.package:
+    name:
+      - sway
+      - fuzzel
+      - rofi
+      - network-manager-applet
+      - kanshi
+      - thunar
+      - '{{ "swappy" if ansible_pkg_mgr != "apt" else "curl" }}'
+      - '{{ "wlogout" if ansible_pkg_mgr != "pacman" else "curl" }}'
+      - '{{ "fira-code-fonts" if ansible_pkg_mgr == "dnf" else "ttf-fira-code" if ansible_pkg_mgr == "pacman" else "fonts-firacode" }}'
+  tags:
+    - install
+    - sway
+    - productivity
+
+- name: Install wlogout on arch
+  changed_when: false
+  ansible.builtin.command: yay -S wlogout --noconfirm
+  when: "ansible_pkg_mgr == 'pacman'"
+  tags:
+    - install
+    - sway
+    - productivity
+
+- name: Install applications used for sway setup 2
+  become: true
+  ansible.builtin.package:
+    name:
+      - waybar
+      - wl-clipboard
+      - mpc
+      - mpv
+      - grim
+      - slurp
+  tags:
+    - install
+    - sway
+    - productivity
+
+- name: Install applications used for sway setup 3
+  become: true
+  ansible.builtin.package:
+    name:
+      - light
+      - '{{ "mako" if ansible_pkg_mgr != "apt" else "mako-notifier" }}'
+      - ncmpcpp
+      - pavucontrol
+      - swaylock
+      - swaybg
+      - wdisplays
+  tags:
+    - install
+    - sway
+    - productivity

@@ -1,0 +1,56 @@
+- name: Installing stow
+  become: true
+  ansible.builtin.package:
+    name: stow
+    state: present
+  tags:
+    - install
+    - dotfiles
+    - stow
+
+- name: Clone dotfiles repository
+  ansible.builtin.git:
+    repo: https://github.com/arnevm123/dotfiles.git
+    dest: ~/dotfiles
+    recursive: true
+    force: true
+  tags:
+    - install
+    - dotfiles
+    - stow
+
+- name: Install
+  ansible.builtin.git:
+    repo: https://github.com/jimeh/tmuxifier.git
+    dest: "~/.tmuxifier"
+    force: true
+  tags:
+    - install
+    - dotfiles
+    - stow
+
+- name: Remove .zshrc file
+  become: true
+  ansible.builtin.file:
+    path: "{{ lookup('env', 'HOME') }}/.zshrc"
+    state: absent
+  tags:
+    - install
+    - dotfiles
+    - stow
+
+- name: Stow dotfiles
+  ansible.builtin.shell: cd $HOME/dotfiles && ./linux
+  changed_when: false
+  tags:
+    - install
+    - dotfiles
+    - stow
+
+- name: Get the master branch of my nvim config
+  ansible.builtin.shell: cd $HOME/.config/nvim && git checkout master
+  changed_when: false
+  tags:
+    - install
+    - dotfiles
+    - stow
