@@ -1,7 +1,15 @@
+- name: Enable Copr repository
+  become: true
+  community.general.dnf_copr:
+    name: erikreider/SwayNotificationCenter
+    state: present
+  when: ansible_pkg_mgr == 'dnf'
+
 - name: Install applications used for sway setup 1
   become: true
   ansible.builtin.package:
     name:
+      - SwayNotificationCenter
       - sway
       - fuzzel
       - rofi
@@ -10,7 +18,6 @@
       - thunar
       - '{{ "swappy" if ansible_pkg_mgr != "apt" else "curl" }}'
       - '{{ "wlogout" if ansible_pkg_mgr != "pacman" else "curl" }}'
-      - '{{ "fira-code-fonts" if ansible_pkg_mgr == "dnf" else "ttf-fira-code" if ansible_pkg_mgr == "pacman" else "fonts-firacode" }}'
   tags:
     - install
     - sway

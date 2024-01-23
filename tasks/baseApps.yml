@@ -6,18 +6,23 @@
       - jq
       - curl
       - fzf
-      # - '{{ "neovim" if ansible_pkg_mgr != "apt" else "curl" }}'
       - webkit2gtk4.0
       - gimp
       - tldr
       - ripgrep
       - htop
+      - btop
       - lsof
       - shutter
       - docker
       - docker-compose
       - openfortivpn
       - copyq
+      - emacs
+      - bat
+      - git-delta
+      - fd-find
+      - thunderbird
       - '{{ "firefox" if ansible_pkg_mgr != "apt" else "firefox-esr" }}'
   tags:
     - install

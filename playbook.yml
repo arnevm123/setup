@@ -14,7 +14,7 @@
       ansible.builtin.package:
         name: "*"
         state: latest
-        update_cache: yes
+        update_cache: true
     # - name: Update and upgrade packages on Arch Linux, Ubuntu, and Fedora
     #   become: true
     #   vars:
@@ -27,10 +27,10 @@
     #       }}"
     #  command: "{{ update_command }}"
     - name: Include Arch tasks
-      include_tasks: tasks/arch.yml
+      ansible.builtin.include_tasks: tasks/arch.yml
       when: "ansible_pkg_mgr == 'pacman'"
     - name: Include Apt tasks
-      include_tasks: tasks/apt.yml
+      ansible.builtin.include_tasks: tasks/apt.yml
       when: "ansible_pkg_mgr == 'apt'"
     - include: tasks/ssh.yml
     - include: tasks/zsh.yml
