@@ -32,12 +32,12 @@
     - name: Include Apt tasks
       ansible.builtin.include_tasks: tasks/apt.yml
       when: "ansible_pkg_mgr == 'apt'"
-    - include: tasks/ssh.yml
-    - include: tasks/zsh.yml
-    - include: tasks/git.yml
-    - include: tasks/baseApps.yml
-    - include: tasks/flatpak.yml
-    - include: tasks/sway.yml
-    - include: tasks/dotfiles.yml
-    - include: tasks/manual.yml
-    - include: tasks/golang.yml
+    - include_tasks: tasks/ssh.yml
+    - include_tasks: tasks/zsh.yml
+    - include_tasks: tasks/git.yml
+    - include_tasks: tasks/baseApps.yml
+    - include_tasks: tasks/flatpak.yml
+    - include_tasks: tasks/sway.yml
+    - include_tasks: tasks/dotfiles.yml
+    - include_tasks: tasks/manual.yml
+    - include_tasks: tasks/golang.yml

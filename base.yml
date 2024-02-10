@@ -2,7 +2,7 @@
   vars:
     ansible_user: "arne"
   tasks:
-    - include: tasks/baseApps.yml
-    - include: tasks/flatpak.yml
-    - include: tasks/sway.yml
-    - include: tasks/golang.yml
+    - include_tasks: tasks/baseApps.yml
+    - include_tasks: tasks/flatpak.yml
+    - include_tasks: tasks/sway.yml
+    - include_tasks: tasks/golang.yml

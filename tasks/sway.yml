@@ -1,8 +1,6 @@
 - name: Enable Copr repository
   become: true
-  community.general.dnf_copr:
-    name: erikreider/SwayNotificationCenter
-    state: present
+  command: dnf copr enable -y erikreider/SwayNotificationCenter
   when: ansible_pkg_mgr == 'dnf'
 
 - name: Install applications used for sway setup 1
@@ -13,6 +11,7 @@
       - sway
       - fuzzel
       - rofi
+      - blueman
       - network-manager-applet
       - kanshi
       - thunar
