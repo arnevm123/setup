@@ -19,6 +19,17 @@
     - dotfiles
     - stow
 
+- name: Clone tpm repository
+  ansible.builtin.git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: ~/.tmux/plugins/tpm
+    recursive: true
+    force: true
+  tags:
+    - install
+    - dotfiles
+    - stow
+
 - name: Install
   ansible.builtin.git:
     repo: https://github.com/jimeh/tmuxifier.git
@@ -33,6 +44,16 @@
   become: true
   ansible.builtin.file:
     path: "{{ lookup('env', 'HOME') }}/.zshrc"
+    state: absent
+  tags:
+    - install
+    - dotfiles
+    - stow
+
+- name: Remove .gitconfig file
+  become: true
+  ansible.builtin.file:
+    path: "{{ lookup('env', 'HOME') }}/.gitconfig"
     state: absent
   tags:
     - install

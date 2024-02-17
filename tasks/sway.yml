@@ -12,6 +12,7 @@
       - fuzzel
       - rofi
       - blueman
+      - pulseaudio-utils
       - network-manager-applet
       - kanshi
       - thunar
