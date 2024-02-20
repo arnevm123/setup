@@ -1,11 +1,13 @@
 - name: Install Golang
   ansible.builtin.command:
     cmd: ./install-go.sh
-    chdir: $HOME/bin
-    creates: $HOME/go/bin
+    chdir: "{{ user_home }}/bin"
+    creates: "{{ user_home }}/go/bin"
 
 - name: Install GolangCi-lint
+  become: true
   ansible.builtin.command:
     cmd: ./install-golangci.sh
-    chdir: $HOME/bin
-    creates: $HOME/.gopath/bin/golangci-lint
+    chdir: "{{ user_home }}/bin"
+    creates: "{{ user_home }}/.gopath/bin/golangci-lint"
+

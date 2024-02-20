@@ -10,7 +10,6 @@
       - SwayNotificationCenter
       - sway
       - fuzzel
-      - rofi
       - blueman
       - pulseaudio-utils
       - network-manager-applet

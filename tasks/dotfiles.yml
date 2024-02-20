@@ -53,7 +53,7 @@
 - name: Remove .gitconfig file
   become: true
   ansible.builtin.file:
-    path: "{{ lookup('env', 'HOME') }}/.gitconfig"
+    path: "{{ user_home }}/.gitconfig"
     state: absent
   tags:
     - install
@@ -61,7 +61,7 @@
     - stow
 
 - name: Stow dotfiles
-  ansible.builtin.shell: cd $HOME/dotfiles && ./linux
+  ansible.builtin.shell: "cd {{ user_home }}/dotfiles && ./linux"
   changed_when: false
   tags:
     - install

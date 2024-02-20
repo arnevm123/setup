@@ -1,5 +1,6 @@
 - hosts: localhost
   vars:
+    user_home: "{{ lookup('env', 'HOME') }}"
     source_key: "./.ssh/id_rsa"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
     source_key_work: "./.ssh/id_work"
