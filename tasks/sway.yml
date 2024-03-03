@@ -15,6 +15,7 @@
       - network-manager-applet
       - kanshi
       - thunar
+      - wl-mirror
       - '{{ "swappy" if ansible_pkg_mgr != "apt" else "curl" }}'
       - '{{ "wlogout" if ansible_pkg_mgr != "pacman" else "curl" }}'
   tags:
