@@ -21,6 +21,8 @@
       - emacs
       - bat
       - git-delta
+      - zoxide
+      - thefuck
       - fd-find
       - thunderbird
       - '{{ "firefox" if ansible_pkg_mgr != "apt" else "firefox-esr" }}'
