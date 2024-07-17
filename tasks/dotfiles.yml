@@ -75,3 +75,11 @@
     - install
     - dotfiles
     - stow
+
+- name: Install all plugins in neovim
+  ansible.builtin.command: nvim --headless +"Lazy! sync" +qa
+  changed_when: false
+  tags:
+    - install
+    - dotfiles
+    - stow
