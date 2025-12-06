@@ -1,0 +1,69 @@
+# only needed for fedora
+- name: Ensure build dependencies are installed
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - wayland-devel
+      - gobject-introspection
+      - gobject-introspection-devel
+      - gtk-doc
+      - vala
+      - gcc
+      - meson
+      - pkgconf
+      - scdoc
+      - pam-devel
+      - wayland-devel
+      - gtk3-devel
+    state: present
+    update_cache: true
+
+- name: Clone the gtk session lock repository (original)
+  ansible.builtin.git:
+    repo: "https://github.com/Cu3PO42/gtk-session-lock.git"
+    dest: "/home/{{ ansible_user }}/Tools/gtk-session-lock"
+    version: master
+    force: true
+
+- name: Configure the build with meson
+  ansible.builtin.command: meson setup build
+  args:
+    chdir: "/home/{{ ansible_user }}/Tools/gtk-session-lock"
+
+- name: Build gtklock
+  ansible.builtin.command: ninja -C build
+  args:
+    chdir: "/home/{{ ansible_user }}/Tools/gtk-session-lock"
+
+- name: Install gtklock
+  become: true
+  ansible.builtin.command: ninja -C build install
+  args:
+    chdir: "/home/{{ ansible_user }}/Tools/gtk-session-lock"
+
+- name: Ensure gtklock is in PATH (run ldconfig if necessary)
+  become: true
+  ansible.builtin.command: ldconfig
+
+- name: Clone the gtklock repository (latest)
+  ansible.builtin.git:
+    repo: "https://github.com/jovanlanik/gtklock.git"
+    dest: "/home/{{ ansible_user }}/Tools/gtklock"
+    version: master
+    force: true
+
+- name: Configure the build with meson
+  ansible.builtin.command: meson setup builddir
+  args:
+    chdir: "/home/{{ ansible_user }}/Tools/gtklock"
+
+- name: Build gtklock
+  ansible.builtin.command: ninja -C builddir
+  args:
+    chdir: "/home/{{ ansible_user }}/Tools/gtklock"
+
+- name: Install gtklock
+  become: true
+  ansible.builtin.command: meson install -C builddir
+  args:
+    chdir: "/home/{{ ansible_user }}/Tools/gtklock"
