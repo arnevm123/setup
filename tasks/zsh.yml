@@ -30,6 +30,14 @@
   when: not ohmyzsh_dir.stat.exists
   ansible.builtin.script: /tmp/install-oh-my-zsh.sh --unattended
 
+- name: Install pyautoenv
+  when: not ohmyzsh_dir.stat.exists
+  ansible.builtin.git:
+    repo: 'https://github.com/hsaunders1904/pyautoenv.git'
+    dest: "~/.oh-my-zsh/plugins/pyautoenv"
+    force: true
+  tags: *tags_for_zsh_tasks
+
 - name: Install zsh-autosuggestions
   when: not ohmyzsh_dir.stat.exists
   ansible.builtin.git:
@@ -37,6 +45,7 @@
     dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
     force: true
   tags: *tags_for_zsh_tasks
+
 
 - name: Install zsh-z
   when: not ohmyzsh_dir.stat.exists
