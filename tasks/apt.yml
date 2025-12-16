@@ -1,13 +1,57 @@
-# - name: Install extra repository
-#   become: true
-#   changed_when: false
-#   ansible.builtin.command: add-apt-repository universe -y
+- name: instal packages
+  apt:
+    state: present
+    install_recommends: false
+    pkg:
+      - bridge-utils
+      - ca-certificates
+      - curl
+      - gnupg
+    update_cache: true
 
-# - name: Install Neovim using AppImage
-#   become: yes
-#   shell: |
-#     cd /usr/local/bin
-#     rm nvim
-#     wget https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
-#     chmod +x nvim.appimage
-#     ln -s /usr/local/bin/nvim.appimage /usr/local/bin/nvim
+- name: get architecture
+  shell: dpkg --print-architecture
+  register: deb_architecture
+
+- name: get gpg key
+  get_url:
+    url: https://download.docker.com/linux/debian/gpg
+    dest: /etc/apt/keyrings/docker.asc
+    mode: 0644
+    force: true
+  tags: install_docker
+
+- name: add docker apt repository key.
+  get_url:
+    url: https://download.docker.com/linux/debian/gpg
+    dest: /etc/apt/trusted.gpg.d/docker.asc
+    mode: 0644
+    force: true
+  tags: install_docker
+
+- name: add docker apt repository.
+  apt_repository:
+    repo: "deb [arch={{ deb_architecture.stdout }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+    state: present
+    update_cache: yes
+    filename: docker
+  tags: install_docker
+
+- name: install docker and related components
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: latest
+    update_cache: true
+  tags: install_docker
+
+- name: restart Docker
+  systemd:
+    name: docker
+    state: restarted
+    masked: false
+  tags: install_docker

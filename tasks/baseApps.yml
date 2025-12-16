@@ -1,21 +1,16 @@
 - name: Install packages
   become: true
   ansible.builtin.package:
-    name:
       - tmux
       - jq
       - curl
       - fzf
-      - webkit2gtk4.0
       - gimp
-      - tldr
       - ripgrep
       - htop
       - btop
       - lsof
       - shutter
-      - docker
-      - docker-compose
       - openfortivpn
       - copyq
       - emacs
@@ -25,8 +20,12 @@
       - thefuck
       - fd-find
       - thunderbird
+      - '{{ "webkit2gtk4.0" if ansible_pkg_mgr != "apt" else "libwebkit2gtk-4.1-0" }}'
+      - '{{ "tldr" if ansible_pkg_mgr != "apt" else "tealdear" }}'
       - '{{ "firefox" if ansible_pkg_mgr != "apt" else "firefox-esr" }}'
       - '{{ "gtklock" if ansible_pkg_mgr != "dnf" else "curl" }}'
+      - '{{ "docker" if ansible_pkg_mgr != "apt" else "curl" }}'
+      - '{{ "docker-compose" if ansible_pkg_mgr != "apt" else "curl" }}'
   tags:
     - install
     - productivity

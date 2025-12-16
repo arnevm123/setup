@@ -3,10 +3,9 @@
     url: https://setup.atuin.sh
     dest: /tmp/atuin_install.sh
     mode: '0755'
-    # TLS settings handled automatically; curl flags not needed
 
 - name: Run Atuin installer
-  ansible.builtin.command: /tmp/atuin_install.sh
+  ansible.builtin.shell: /tmp/atuin_install.sh
   args:
     creates: /home/{{ ansible_user}}/.atuin/bin/atuin
 

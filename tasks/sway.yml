@@ -7,7 +7,6 @@
   become: true
   ansible.builtin.package:
     name:
-      - SwayNotificationCenter
       - sway
       - fuzzel
       - blueman
@@ -16,6 +15,7 @@
       - kanshi
       - thunar
       - wl-mirror
+      - '{{ "SwayNotificationCenter" if ansible_pkg_mgr != "apt" else "sway-notification-center" }}'
       - '{{ "swappy" if ansible_pkg_mgr != "apt" else "curl" }}'
       - '{{ "wlogout" if ansible_pkg_mgr != "pacman" else "curl" }}'
   tags:
