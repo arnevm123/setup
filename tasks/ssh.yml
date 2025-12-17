@@ -37,7 +37,7 @@
     - ~/.ssh/*.pub
 
 - name: Ensure github.com is a known host
-  ansbile.builtlin.lineinfile:
+  ansbile.builtin.lineinfile:
     dest: ~/.ssh/known_hosts
     create: true
     state: present
