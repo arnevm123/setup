@@ -24,6 +24,7 @@
   tags: install_docker
 
 - name: add docker apt repository key.
+  become: true
   get_url:
     url: https://download.docker.com/linux/debian/gpg
     dest: /etc/apt/trusted.gpg.d/docker.asc
