@@ -1,8 +1,6 @@
 - name: Configure local development environment
   hosts: localhost
   vars:
-    ansible_user: "arne"
-
     source_ssh_key: "./.ssh/id_rsa"
     dest_ssh_key: "{{ ansible_env.HOME }}/.ssh/id_rsa"
 
