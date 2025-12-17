@@ -15,6 +15,7 @@
   register: deb_architecture
 
 - name: get gpg key
+  become: true
   get_url:
     url: https://download.docker.com/linux/debian/gpg
     dest: /etc/apt/keyrings/docker.asc
