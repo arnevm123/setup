@@ -55,6 +55,7 @@
   tags: install_docker
 
 - name: restart Docker
+  become: true
   systemd:
     name: docker
     state: restarted
