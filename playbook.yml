@@ -9,34 +9,33 @@
     dest_api: "{{ lookup('env', 'HOME') }}/.zshexports"
     ansible_user: "arne"
   tasks:
-    - name: Update and upgrade packages
-      become: true
-      when: "ansible_pkg_mgr != 'apt'"
-      ansible.builtin.package:
-        name: "*"
-        state: latest
-        update_cache: true
-    # - name: Update and upgrade packages on Arch Linux, Ubuntu, and Fedora
-    #   become: true
-    #   vars:
-    #     package_manager: "{{ ansible_pkg_mgr }}"
-    #     update_command: "{{
-    #         'pacman -Syu --noconfirm' if package_manager == 'pacman'
-    #         else 'apt update && apt upgrade -y' if package_manager == 'apt'
-    #         else 'dnf update -y' if package_manager == 'dnf'
-    #         else ''
-    #       }}"
-    #  command: "{{ update_command }}"
     - name: Include Arch tasks
       ansible.builtin.include_tasks: tasks/arch.yml
       when: "ansible_pkg_mgr == 'pacman'"
-    - include_tasks: tasks/ssh.yml
-    - include_tasks: tasks/zsh.yml
-    - include_tasks: tasks/git.yml
-    - include_tasks: tasks/baseApps.yml
-    - include_tasks: tasks/flatpak.yml
-    - include_tasks: tasks/sway.yml
-    - include_tasks: tasks/manual.yml
-    - include_tasks: tasks/dotfiles.yml
-    - include_tasks: tasks/golang.yml
-    - include_tasks: tasks/nvim_plugins.yml
+
+    - name: Set up SSH keys and config
+      ansible.builtin.include_tasks: tasks/ssh.yml
+
+    - name: Set up ZSH
+      ansible.builtin.include_tasks: tasks/zsh.yml
+
+    - name: Set up git
+      ansible.builtin.include_tasks: tasks/git.yml
+
+    - name: Install Applications and Configurations
+      ansible.builtin.include_tasks: tasks/baseApps.yml
+
+    - name: Set up applications using flatpak
+      ansible.builtin.include_tasks: tasks/flatpak.yml
+
+    - name: Set up sway config
+      ansible.builtin.include_tasks: tasks/sway.yml
+
+    - name: Set up dotfiles and development environment
+      ansible.builtin.include_tasks: tasks/dotfiles.yml
+
+    - name: Install manual applications
+      ansible.builtin.include_tasks: tasks/manual.yml
+
+    - name: Install Neovim plugins
+      ansible.builtin.include_tasks: tasks/nvim_plugins.yml

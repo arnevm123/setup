@@ -4,7 +4,6 @@
     name: zsh
     state: present
   changed_when: false
-  tags: &tags_for_zsh_tasks ['install', 'productivity', 'dotfiles', 'zsh']
 
 - name: Change shell to zsh for current user
   become: true
@@ -17,7 +16,6 @@
     path: ~/.oh-my-zsh
   register: ohmyzsh_dir
   changed_when: false
-  tags: *tags_for_zsh_tasks
 
 - name: Download Oh My Zsh installation script
   when: not ohmyzsh_dir.stat.exists
@@ -30,50 +28,43 @@
   when: not ohmyzsh_dir.stat.exists
   ansible.builtin.script: /tmp/install-oh-my-zsh.sh --unattended
 
-- name: Install pyautoenv
+- name: Install pyautoenv # noqa: latest[git]
   when: not ohmyzsh_dir.stat.exists
   ansible.builtin.git:
     repo: 'https://github.com/hsaunders1904/pyautoenv.git'
     dest: "~/.oh-my-zsh/plugins/pyautoenv"
     force: true
-  tags: *tags_for_zsh_tasks
 
-- name: Install zsh-autosuggestions
+- name: Install zsh-autosuggestions # noqa: latest[git]
   when: not ohmyzsh_dir.stat.exists
   ansible.builtin.git:
     repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
     dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
     force: true
-  tags: *tags_for_zsh_tasks
 
-
-- name: Install zsh-z
+- name: Install zsh-z # noqa: latest[git]
   when: not ohmyzsh_dir.stat.exists
   ansible.builtin.git:
     repo: 'https://github.com/agkozak/zsh-z'
     dest: "~/.oh-my-zsh/plugins/zsh-z"
     force: true
-  tags: *tags_for_zsh_tasks
 
-- name: Install omz-git
+- name: Install omz-git # noqa: latest[git]
   when: not ohmyzsh_dir.stat.exists
   ansible.builtin.git:
     repo: 'https://github.com/tnwinc/omz-git.git'
     dest: "~/.oh-my-zsh/plugins/omz-git"
     force: true
-  tags: *tags_for_zsh_tasks
 
-- name: Install zsh-autosuggestions
+- name: Install zsh-autosuggestions # noqa: latest[git]
   when: not ohmyzsh_dir.stat.exists
   ansible.builtin.git:
     repo: 'https://github.com/tnwinc/omz-git.git'
     dest: "~/.oh-my-zsh/plugins/omz-git"
     force: true
-  tags: *tags_for_zsh_tasks
 
 - name: Install zsh apikeys
   ansible.builtin.copy:
     src: "{{ source_api }}"
     dest: "{{ dest_api }}"
     mode: '0600'
-  tags: *tags_for_zsh_tasks

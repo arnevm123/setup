@@ -1,7 +1,8 @@
 - name: Enable Copr repository
   become: true
-  command: dnf copr enable -y erikreider/SwayNotificationCenter
+  ansible.builtin.command: dnf copr enable -y erikreider/SwayNotificationCenter
   when: ansible_pkg_mgr == 'dnf'
+  changed_when: true
 
 - name: Install applications used for sway setup
   become: true
@@ -31,16 +32,9 @@
       - '{{ "SwayNotificationCenter" if ansible_pkg_mgr != "apt" else "sway-notification-center" }}'
       - '{{ "swappy" if ansible_pkg_mgr != "apt" else "curl" }}'
       - '{{ "wlogout" if ansible_pkg_mgr != "pacman" else "curl" }}'
-  tags:
-    - install
-    - sway
-    - productivity
+    state: present
 
 - name: Install wlogout on arch
   changed_when: false
   ansible.builtin.command: yay -S wlogout --noconfirm
   when: "ansible_pkg_mgr == 'pacman'"
-  tags:
-    - install
-    - sway
-    - productivity

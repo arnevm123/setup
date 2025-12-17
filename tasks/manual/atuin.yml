@@ -1,0 +1,10 @@
+- name: Download Atuin setup script
+  ansible.builtin.get_url:
+    url: https://setup.atuin.sh
+    dest: /tmp/atuin_install.sh
+    mode: '0755'
+
+- name: Run Atuin installer
+  ansible.builtin.shell: /tmp/atuin_install.sh
+  args:
+    creates: /home/{{ ansible_user}}/.atuin/bin/atuin

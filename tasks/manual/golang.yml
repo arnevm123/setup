@@ -10,4 +10,3 @@
     cmd: ./install-golangci.sh
     chdir: "{{ user_home }}/bin"
     creates: "{{ user_home }}/.gopath/bin/golangci-lint"
-

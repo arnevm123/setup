@@ -44,7 +44,7 @@
     - install
     - ssh
 - name: Set authorized key from file
-  authorized_key:
+  ansible.posix.authorized_key:
     user: "{{ lookup('env', 'USER') }}"
     state: present
     key: "{{ lookup('file', item) }}"
@@ -55,8 +55,8 @@
     - install
     - ssh
     - tester
-- name: ensure github.com is a known host
-  lineinfile:
+- name: Ensure github.com is a known host
+  ansbile.builtlin.lineinfile:
     dest: ~/.ssh/known_hosts
     create: true
     state: present

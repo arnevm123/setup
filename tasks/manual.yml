@@ -1,44 +1,21 @@
-- name: Download Atuin setup script
-  ansible.builtin.get_url:
-    url: https://setup.atuin.sh
-    dest: /tmp/atuin_install.sh
-    mode: '0755'
+- name: Install Atuin
+  ansible.builtin.include_tasks: tasks/manual/atuin.yml
 
-- name: Run Atuin installer
-  ansible.builtin.shell: /tmp/atuin_install.sh
-  args:
-    creates: /home/{{ ansible_user}}/.atuin/bin/atuin
+- name: Install Keyd
+  ansible.builtin.include_tasks: tasks/manual/keyd.yml
 
-- name: Clone the keyd repository
-  become: true
-  git:
-    repo: https://github.com/rvaiya/keyd
-    dest: /opt/keyd
-    version: master
+- name: Install GoLang
+  ansible.builtin.include_tasks: tasks/manual/golang.yml
 
-- name: Make keyd trusted
-  ansible.builtin.command: >
-    git config --global --add safe.directory /opt/keyd
+- name: Install deno
+  ansible.builtin.include_tasks: tasks/manual/deno.yml
 
-- name: Compile and install keyd
-  become: true
-  ansible.builtin.command: sudo make
-  args:
-    chdir: /opt/keyd
+- name: Install rust
+  ansible.builtin.include_tasks: tasks/manual/rust.yml
 
-- name: Compile and install keyd
-  become: true
-  ansible.builtin.command: sudo make install
-  args:
-    chdir: /opt/keyd
-
-- name: Enable and start keyd service
-  become: true
-  ansible.builtin.systemd:
-    name: keyd
-    state: started
-    enabled: true
+- name: Install nvim
+  ansible.builtin.include_tasks: tasks/manual/nvim.yml
 
 - name: Install gtklock on fedora
-  ansible.builtin.include_tasks: tasks/gtklock.yml
+  ansible.builtin.include_tasks: tasks/manual/gtklock.yml
   when: "ansible_pkg_mgr == 'dnf'"

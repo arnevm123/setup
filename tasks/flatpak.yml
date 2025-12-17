@@ -3,8 +3,6 @@
   ansible.builtin.package:
     name: flatpak
     state: present
-  tags:
-    - flatpak
 
 - name: Add Flathub remote
   become: true
@@ -14,7 +12,7 @@
 
 - name: Install Flathub packages
   become: true
-  flatpak:
+  community.general.flatpak:
     name:
       - com.slack.Slack
       - com.wps.Office
@@ -22,5 +20,3 @@
       - com.visualstudio.code
       - app/one.ablaze.floorp/x86_64/stable
       - io.github.mahmoudbahaa.outlook_for_linux
-  tags:
-    - flatpak

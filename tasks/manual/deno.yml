@@ -1,0 +1,32 @@
+- name: Check if deno is installed
+  changed_when: false
+  ansible.builtin.command: ~/.deno/bin/deno --version
+  register: deno_exists
+  ignore_errors: true
+  tags:
+    - install
+    - productivity
+    - languages
+
+- name: Download Installer
+  when: deno_exists is failed
+  ansible.builtin.get_url:
+    url: https://deno.land/x/install/install.sh
+    dest: /tmp/sh.deno.rs
+    mode: '0755'
+    force: 'yes'
+  tags:
+    - deno
+    - install
+    - productivity
+    - languages
+
+- name: Install deno
+  when: deno_exists is failed
+  changed_when: false
+  ansible.builtin.command: /bin/bash /tmp/sh.deno.rs
+  tags:
+    - deno
+    - install
+    - productivity
+    - languages

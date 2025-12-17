@@ -1,7 +1,3 @@
 - name: Install all plugins in neovim
-  ansible.builtin.command: $HOME/.local/share/bob/nvim-bin/nvim --headless +"Lazy! sync" +qa
+  ansible.builtin.command: '{{ lookup("env", "HOME") }}/.local/share/bob/nvim-bin/nvim --headless +"Lazy! sync" +qa'
   changed_when: false
-  tags:
-    - install
-    - dotfiles
-    - stow

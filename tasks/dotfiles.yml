@@ -3,42 +3,20 @@
   ansible.builtin.package:
     name: stow
     state: present
-  tags:
-    - install
-    - dotfiles
-    - stow
 
-- name: Clone dotfiles repository
+- name: Clone dotfiles repository # noqa: latest[git]
   ansible.builtin.git:
     repo: https://github.com/arnevm123/dotfiles.git
     dest: ~/dotfiles
     recursive: true
     force: true
-  tags:
-    - install
-    - dotfiles
-    - stow
 
-- name: Clone tpm repository
+- name: Clone tpm repository # noqa: latest[git]
   ansible.builtin.git:
     repo: https://github.com/tmux-plugins/tpm
     dest: ~/.tmux/plugins/tpm
     recursive: true
     force: true
-  tags:
-    - install
-    - dotfiles
-    - stow
-
-- name: Install
-  ansible.builtin.git:
-    repo: https://github.com/jimeh/tmuxifier.git
-    dest: "~/.tmuxifier"
-    force: true
-  tags:
-    - install
-    - dotfiles
-    - stow
 
 - name: Remove .zshrc file
   become: true
@@ -86,6 +64,11 @@
     - dotfiles
     - stow
 
-- name: setup my keyd config
+- name: Setup keyd config
   become: true
-  ansible.builtin.command: sudo cp /home/{{ ansible_user}}/dotfiles/keyd/default.conf /etc/keyd/default.conf
+  ansible.builtin.copy:
+    src: "{{ ansible_env.HOME }}/dotfiles/keyd/default.conf"
+    dest: /etc/keyd/default.conf
+    owner: root
+    group: root
+    mode: "0644"
