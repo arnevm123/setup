@@ -85,3 +85,7 @@
     - install
     - dotfiles
     - stow
+
+- name: setup my keyd config
+  become: true
+  ansible.builtin.command: sudo cp /home/{{ ansible_user}}/dotfiles/keyd/default.conf /etc/keyd/default.conf

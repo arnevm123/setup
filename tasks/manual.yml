@@ -39,10 +39,6 @@
     state: started
     enabled: true
 
-- name: setup my config
-  become: true
-  ansible.builtin.command: sudo cp /home/{{ ansible_user}}/dotfiles/keyd/default.conf /etc/keyd/default.conf
-
 - name: Install gtklock on fedora
   ansible.builtin.include_tasks: tasks/gtklock.yml
   when: "ansible_pkg_mgr == 'dnf'"
