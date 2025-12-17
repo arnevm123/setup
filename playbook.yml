@@ -42,3 +42,4 @@
     - include_tasks: tasks/dotfiles.yml
     - include_tasks: tasks/manual.yml
     - include_tasks: tasks/golang.yml
+    - include_tasks: tasks/nvim_plugins.yml
