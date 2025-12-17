@@ -28,9 +28,11 @@
       - swaylock
       - swaybg
       - wdisplays
+      - swappy
+      - wl-present
+      - wf-recorder
       - '{{ "mako" if ansible_pkg_mgr != "apt" else "mako-notifier" }}'
       - '{{ "SwayNotificationCenter" if ansible_pkg_mgr != "apt" else "sway-notification-center" }}'
-      - '{{ "swappy" if ansible_pkg_mgr != "apt" else "curl" }}'
       - '{{ "wlogout" if ansible_pkg_mgr != "pacman" else "curl" }}'
     state: present
 

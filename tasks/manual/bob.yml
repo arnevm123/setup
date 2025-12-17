@@ -3,27 +3,13 @@
   ansible.builtin.command: ~/.cargo/bin/bob --version
   register: bob_exists
   ignore_errors: true
-  tags:
-    - install
-    - productivity
-    - languages
 
 - name: Install bob
   when: bob_exists is failed
   changed_when: false
   ansible.builtin.command: ~/.cargo/bin/cargo install wl-gammarelay-rs --locked
-  tags:
-    - neovim
-    - install
-    - productivity
-    - languages
 
 - name: Install bob
   when: bob_exists is failed
   changed_when: false
   ansible.builtin.command: ~/.cargo/bin/cargo install bob-nvim
-  tags:
-    - neovim
-    - install
-    - productivity
-    - languages

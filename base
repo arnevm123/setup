@@ -1,2 +1,0 @@
-#! /usr/bin/bash
-ansible-playbook --ask-become-pass base.yml

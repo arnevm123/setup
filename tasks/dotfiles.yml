@@ -23,46 +23,26 @@
   ansible.builtin.file:
     path: "{{ lookup('env', 'HOME') }}/.zshrc"
     state: absent
-  tags:
-    - install
-    - dotfiles
-    - stow
 
 - name: Remove .zshenv file
   become: true
   ansible.builtin.file:
     path: "{{ lookup('env', 'HOME') }}/.zshenv"
     state: absent
-  tags:
-    - install
-    - dotfiles
-    - stow
 
 - name: Remove .gitconfig file
   become: true
   ansible.builtin.file:
     path: "{{ user_home }}/.gitconfig"
     state: absent
-  tags:
-    - install
-    - dotfiles
-    - stow
 
 - name: Stow dotfiles
   ansible.builtin.shell: "cd {{ user_home }}/dotfiles && ./linux"
   changed_when: false
-  tags:
-    - install
-    - dotfiles
-    - stow
 
 - name: Get the master branch of my nvim config
   ansible.builtin.shell: cd $HOME/.config/nvim && git checkout master
   changed_when: false
-  tags:
-    - install
-    - dotfiles
-    - stow
 
 - name: Setup keyd config
   become: true
