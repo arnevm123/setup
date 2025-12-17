@@ -21,49 +21,56 @@
 - name: Clone the gtk session lock repository (original)
   ansible.builtin.git:
     repo: "https://github.com/Cu3PO42/gtk-session-lock.git"
-    dest: "/home/{{ ansible_user }}/Tools/gtk-session-lock"
+    dest: "{{ ansible_env.HOME }}/Tools/gtk-session-lock"
     version: master
     force: true
 
 - name: Configure the build with meson
   ansible.builtin.command: meson setup build
+  changed_when: false
   args:
-    chdir: "/home/{{ ansible_user }}/Tools/gtk-session-lock"
+    chdir: "{{ ansible_env.HOME }}/Tools/gtk-session-lock"
 
 - name: Build gtklock
   ansible.builtin.command: ninja -C build
+  changed_when: false
   args:
-    chdir: "/home/{{ ansible_user }}/Tools/gtk-session-lock"
+    chdir: "{{ ansible_env.HOME }}/Tools/gtk-session-lock"
 
 - name: Install gtklock
   become: true
   ansible.builtin.command: ninja -C build install
+  changed_when: false
   args:
-    chdir: "/home/{{ ansible_user }}/Tools/gtk-session-lock"
+    chdir: "{{ ansible_env.HOME }}/Tools/gtk-session-lock"
 
 - name: Ensure gtklock is in PATH (run ldconfig if necessary)
   become: true
+  changed_when: false
   ansible.builtin.command: ldconfig
 
 - name: Clone the gtklock repository (latest)
   ansible.builtin.git:
     repo: "https://github.com/jovanlanik/gtklock.git"
-    dest: "/home/{{ ansible_user }}/Tools/gtklock"
+    dest: "{{ ansible_env.HOME }}/Tools/gtklock"
     version: master
     force: true
 
 - name: Configure the build with meson
+  changed_when: false
   ansible.builtin.command: meson setup builddir
   args:
-    chdir: "/home/{{ ansible_user }}/Tools/gtklock"
+    chdir: "{{ ansible_env.HOME }}/Tools/gtklock"
 
 - name: Build gtklock
+  changed_when: false
   ansible.builtin.command: ninja -C builddir
   args:
-    chdir: "/home/{{ ansible_user }}/Tools/gtklock"
+    chdir: "{{ ansible_env.HOME }}/Tools/gtklock"
 
 - name: Install gtklock
   become: true
+  changed_when: false
   ansible.builtin.command: meson install -C builddir
   args:
-    chdir: "/home/{{ ansible_user }}/Tools/gtklock"
+    chdir: "{{ ansible_env.HOME }}/Tools/gtklock"

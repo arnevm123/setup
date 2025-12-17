@@ -1,31 +1,31 @@
 - name: Ensure .ssh directory exists.
   ansible.builtin.file:
-    dest: "{{ dest_key | dirname }}"
+    dest: "{{ dest_ssh_key | dirname }}"
     mode: '0700'
     state: directory
 
 - name: Install ssh key
   ansible.builtin.copy:
-    src: "{{ source_key }}"
-    dest: "{{ dest_key }}"
+    src: "{{ source_ssh_key }}"
+    dest: "{{ dest_ssh_key }}"
     mode: '0600'
 
 - name: Install ssh key public
   ansible.builtin.copy:
-    src: "{{ source_key }}.pub"
-    dest: "{{ dest_key }}.pub"
+    src: "{{ source_ssh_key }}.pub"
+    dest: "{{ dest_ssh_key }}.pub"
     mode: '0644'
 
 - name: Install work ssh key
   ansible.builtin.copy:
-    src: "{{ source_key_work }}"
-    dest: "{{ dest_key_work }}"
+    src: "{{ source_ssh_key_work }}"
+    dest: "{{ dest_ssh_key_work }}"
     mode: '0600'
 
 - name: Install work ssh key public
   ansible.builtin.copy:
-    src: "{{ source_key_work }}.pub"
-    dest: "{{ dest_key_work }}.pub"
+    src: "{{ source_ssh_key_work }}.pub"
+    dest: "{{ dest_ssh_key_work }}.pub"
     mode: '0644'
 
 - name: Set authorized key from file
@@ -36,10 +36,8 @@
   with_fileglob:
     - ~/.ssh/*.pub
 
-- name: Ensure github.com is a known host
-  ansible.builtin.lineinfile:
-    dest: ~/.ssh/known_hosts
-    create: true
-    state: present
-    line: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
-    regexp: "^github\\.com"
+- name: Add github.com to known_hosts
+  ansible.builtin.known_hosts:
+    path: "{{ ansible_env.HOME }}/.ssh/known_hosts"
+    name: github.com
+    key: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"

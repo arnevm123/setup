@@ -1,38 +1,32 @@
-- hosts: localhost
+- name: Configure local development environment
+  hosts: localhost
   vars:
-    user_home: "{{ lookup('env', 'HOME') }}"
-    source_key: "./.ssh/id_rsa"
-    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_rsa"
-    source_key_work: "./.ssh/id_work"
-    dest_key_work: "{{ lookup('env', 'HOME') }}/.ssh/id_work"
-    source_api: "./.zshexports"
-    dest_api: "{{ lookup('env', 'HOME') }}/.zshexports"
     ansible_user: "arne"
-  tasks:
-    - name: Include Arch tasks
-      ansible.builtin.include_tasks: tasks/arch.yml
-      when: "ansible_pkg_mgr == 'pacman'"
 
+    source_ssh_key: "./.ssh/id_rsa"
+    dest_ssh_key: "{{ ansible_env.HOME }}/.ssh/id_rsa"
+
+    source_ssh_key_work: "./.ssh/id_work"
+    dest_ssh_key_work: "{{ ansible_env.HOME }}/.ssh/id_work"
+
+    source_api: "./.zshexports"
+    dest_api: "{{ ansible_env.HOME }}/.zshexports"
+
+  tasks:
     - name: Set up SSH keys and config
       ansible.builtin.include_tasks: tasks/ssh.yml
-
-    - name: Set up ZSH
-      ansible.builtin.include_tasks: tasks/zsh.yml
 
     - name: Set up git
       ansible.builtin.include_tasks: tasks/git.yml
 
-    - name: Install Applications and Configurations
-      ansible.builtin.include_tasks: tasks/baseApps.yml
-
-    - name: Set up applications using flatpak
-      ansible.builtin.include_tasks: tasks/flatpak.yml
-
-    - name: Set up sway config
-      ansible.builtin.include_tasks: tasks/sway.yml
+    - name: Install Applications
+      ansible.builtin.include_tasks: tasks/apps.yml
 
     - name: Set up dotfiles and development environment
       ansible.builtin.include_tasks: tasks/dotfiles.yml
+
+    - name: Set up ZSH
+      ansible.builtin.include_tasks: tasks/zsh.yml
 
     - name: Install manual applications
       ansible.builtin.include_tasks: tasks/manual.yml

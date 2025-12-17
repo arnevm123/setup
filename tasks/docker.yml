@@ -1,0 +1,21 @@
+# sudo groupadd docker
+- name: Create "docker" group
+  become: true
+  ansible.builtin.group:
+    name: "docker"
+    state: present
+
+# sudo usermod -aG docker $USER
+- name: Add remote user to "docker" group
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_env.USER }}"
+    group: "docker"
+    append: true
+
+- name: Restart Docker
+  become: true
+  ansible.builtin.systemd:
+    name: docker
+    state: restarted
+    masked: false

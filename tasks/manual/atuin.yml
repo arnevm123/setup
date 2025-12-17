@@ -5,6 +5,6 @@
     mode: '0755'
 
 - name: Run Atuin installer
-  ansible.builtin.shell: /tmp/atuin_install.sh
+  ansible.builtin.command: /tmp/atuin_install.sh
   args:
-    creates: /home/{{ ansible_user}}/.atuin/bin/atuin
+    creates: "{{ ansible_env.HOME }}/.atuin/bin/atuin"

@@ -38,22 +38,3 @@
     state: present
     update_cache: true
     filename: docker
-
-- name: Install docker and related components
-  become: true
-  ansible.builtin.apt:
-    name:
-      - docker-ce
-      - docker-ce-cli
-      - containerd.io
-      - docker-buildx-plugin
-      - docker-compose-plugin
-    state: present
-    update_cache: true
-
-- name: Restart Docker
-  become: true
-  ansible.builtin.systemd:
-    name: docker
-    state: restarted
-    masked: false

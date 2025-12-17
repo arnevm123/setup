@@ -1,0 +1,100 @@
+- name: Enable required repositories
+  ansible.builtin.include_tasks: tasks/enable-repositories.yml
+
+- name: Install packages
+  become: true
+  ansible.builtin.package:
+    name:
+      - flatpak
+      - tmux
+      - jq
+      - curl
+      - fzf
+      - gimp
+      - ripgrep
+      - htop
+      - btop
+      - lsof
+      - shutter
+      - openfortivpn
+      - copyq
+      - emacs
+      - bat
+      - git-delta
+      - zoxide
+      - thefuck
+      - fd-find
+      - thunderbird
+      - '{{ "webkit2gtk4.0" if ansible_pkg_mgr != "apt" else "libwebkit2gtk-4.1-0" }}'
+      - '{{ "tldr" if ansible_pkg_mgr != "apt" else "tealdeer" }}'
+      - '{{ "firefox" if ansible_pkg_mgr != "apt" else "firefox-esr" }}'
+      - '{{ "gtklock" if ansible_pkg_mgr != "dnf" else "curl" }}'
+      - '{{ "docker" if ansible_pkg_mgr != "apt" else "docker-ce" }}'
+      - '{{ "docker-cli" if ansible_pkg_mgr != "apt" else "docker-ce-cli" }}'
+      - '{{ "docker-compose" if ansible_pkg_mgr != "apt" else "docker-compose-plugin" }}'
+      - containerd.io
+      - docker-buildx-plugin
+    state: present
+
+- name: Install languages
+  become: true
+  ansible.builtin.package:
+    name:
+      - nodejs
+      - npm
+      - shellcheck
+      - luarocks
+      - make
+      - ansible-lint
+      - '{{ "python3-pip" if ansible_pkg_mgr != "pacman" else "python-pip" }}'
+      - '{{ "g++" if ansible_pkg_mgr != "pacman" else "gcc" }}'
+      - '{{ "sqlite" if ansible_pkg_mgr != "apt" else "sqlite3" }}'
+      - '{{ "sqlite-devel" if ansible_pkg_mgr != "apt" else "libsqlite3-dev" }}'
+      - '{{ "sqlite-tcl" if ansible_pkg_mgr != "apt" else "libsqlite3-tcl" }}'
+
+- name: Install applications used for sway setup
+  become: true
+  ansible.builtin.package:
+    name:
+      - sway
+      - fuzzel
+      - blueman
+      - pulseaudio-utils
+      - network-manager-applet
+      - kanshi
+      - thunar
+      - wl-mirror
+      - waybar
+      - wl-clipboard
+      - mpc
+      - mpv
+      - grim
+      - slurp
+      - light
+      - ncmpcpp
+      - pavucontrol
+      - swaylock
+      - swaybg
+      - wdisplays
+      - swappy
+      - wl-present
+      - wf-recorder
+      - '{{ "mako" if ansible_pkg_mgr != "apt" else "mako-notifier" }}'
+      - '{{ "SwayNotificationCenter" if ansible_pkg_mgr != "apt" else "sway-notification-center" }}'
+      - '{{ "wlogout" if ansible_pkg_mgr != "pacman" else "curl" }}'
+    state: present
+
+- name: Add Flathub remote
+  become: true
+  ansible.builtin.command: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+  register: flathubremote
+  changed_when: flathubremote.rc != 0
+
+- name: Install Flathub packages
+  become: true
+  community.general.flatpak:
+    name:
+      - com.slack.Slack
+      - com.wps.Office
+      - com.spotify.Client
+      - app/one.ablaze.floorp/x86_64/stable

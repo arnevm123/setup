@@ -21,23 +21,23 @@
 - name: Remove .zshrc file
   become: true
   ansible.builtin.file:
-    path: "{{ lookup('env', 'HOME') }}/.zshrc"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     state: absent
 
 - name: Remove .zshenv file
   become: true
   ansible.builtin.file:
-    path: "{{ lookup('env', 'HOME') }}/.zshenv"
+    path: "{{ ansible_env.HOME }}/.zshenv"
     state: absent
 
 - name: Remove .gitconfig file
   become: true
   ansible.builtin.file:
-    path: "{{ user_home }}/.gitconfig"
+    path: "{{ ansible_env.HOME }}/.gitconfig"
     state: absent
 
 - name: Stow dotfiles
-  ansible.builtin.shell: "cd {{ user_home }}/dotfiles && ./linux"
+  ansible.builtin.shell: "cd {{ ansible_env.HOME }}/dotfiles && ./linux"
   changed_when: false
 
 - name: Get the master branch of my nvim config

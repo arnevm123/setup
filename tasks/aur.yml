@@ -1,7 +1,6 @@
 # Install yay AUR helper
 - name: Install yay AUR helper
   become: true
-  become_user: "{{ ansible_user }}"
   ansible.builtin.shell: |
     sudo pacman -S --needed git base-devel
     git clone https://aur.archlinux.org/yay.git
