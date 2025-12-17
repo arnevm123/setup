@@ -50,6 +50,16 @@
     - dotfiles
     - stow
 
+- name: Remove .zshenv file
+  become: true
+  ansible.builtin.file:
+    path: "{{ lookup('env', 'HOME') }}/.zshenv"
+    state: absent
+  tags:
+    - install
+    - dotfiles
+    - stow
+
 - name: Remove .gitconfig file
   become: true
   ansible.builtin.file:
