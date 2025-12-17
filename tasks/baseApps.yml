@@ -33,6 +33,30 @@
       - install
       - productivity
 
+- name: Install languages
+  become: true
+  ansible.builtin.package:
+    name:
+      - nodejs
+      - npm
+      - shellcheck
+      - luarocks
+      - make
+      - ansible-lint
+      - '{{ "python3-pip" if ansible_pkg_mgr != "pacman" else "python-pip" }}'
+      - '{{ "g++" if ansible_pkg_mgr != "pacman" else "gcc" }}'
+      - '{{ "sqlite" if ansible_pkg_mgr != "apt" else "sqlite3" }}'
+      - '{{ "sqlite-devel" if ansible_pkg_mgr != "apt" else "libsqlite3-dev" }}'
+      - '{{ "sqlite-tcl" if ansible_pkg_mgr != "apt" else "libsqlite3-tcl" }}'
+  tags:
+    - install
+    - productivity
+    - languages
+
+- name: Install docker on apt based systems
+  ansible.builtin.include_tasks: tasks/apt-docker.yml
+  when: "ansible_pkg_mgr == 'apt'"
+
 # sudo groupadd docker
 - name: Create "docker" group
   become: true
@@ -47,27 +71,6 @@
     name: "{{ ansible_user }}"
     group: "docker"
     append: true
-
-- name: Install languages
-  become: true
-  ansible.builtin.package:
-    name:
-      - nodejs
-      - npm
-      # - '{{ "go" if ansible_pkg_mgr != "apt" else "golang-go" }}'
-      - shellcheck
-      - luarocks
-      - make
-      - ansible-lint
-      - '{{ "python3-pip" if ansible_pkg_mgr != "pacman" else "python-pip" }}'
-      - '{{ "g++" if ansible_pkg_mgr != "pacman" else "gcc" }}'
-      - '{{ "sqlite" if ansible_pkg_mgr != "apt" else "sqlite3" }}'
-      - '{{ "sqlite-devel" if ansible_pkg_mgr != "apt" else "libsqlite3-dev" }}'
-      - '{{ "sqlite-tcl" if ansible_pkg_mgr != "apt" else "libsqlite3-tcl" }}'
-  tags:
-    - install
-    - productivity
-    - languages
 
 - name: Check if deno is installed
   changed_when: false

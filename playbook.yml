@@ -30,9 +30,6 @@
     - name: Include Arch tasks
       ansible.builtin.include_tasks: tasks/arch.yml
       when: "ansible_pkg_mgr == 'pacman'"
-    - name: Include Apt tasks
-      ansible.builtin.include_tasks: tasks/apt.yml
-      when: "ansible_pkg_mgr == 'apt'"
     - include_tasks: tasks/ssh.yml
     - include_tasks: tasks/zsh.yml
     - include_tasks: tasks/git.yml
