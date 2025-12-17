@@ -23,7 +23,7 @@
       - fd-find
       - thunderbird
       - '{{ "webkit2gtk4.0" if ansible_pkg_mgr != "apt" else "libwebkit2gtk-4.1-0" }}'
-      - '{{ "tldr" if ansible_pkg_mgr != "apt" else "tealdear" }}'
+      - '{{ "tldr" if ansible_pkg_mgr != "apt" else "tealdeer" }}'
       - '{{ "firefox" if ansible_pkg_mgr != "apt" else "firefox-esr" }}'
       - '{{ "gtklock" if ansible_pkg_mgr != "dnf" else "curl" }}'
       - '{{ "docker" if ansible_pkg_mgr != "apt" else "curl" }}'
