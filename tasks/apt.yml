@@ -1,4 +1,5 @@
 - name: instal packages
+  become: true
   apt:
     state: present
     install_recommends: false
@@ -30,6 +31,7 @@
   tags: install_docker
 
 - name: add docker apt repository.
+  become: true
   apt_repository:
     repo: "deb [arch={{ deb_architecture.stdout }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
     state: present
@@ -38,6 +40,7 @@
   tags: install_docker
 
 - name: install docker and related components
+  become: true
   apt:
     name:
       - docker-ce
