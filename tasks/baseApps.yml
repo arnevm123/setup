@@ -1,6 +1,8 @@
+# Install base productivity applications
 - name: Install packages
   become: true
   ansible.builtin.package:
+    name:
       - tmux
       - jq
       - curl
@@ -26,9 +28,10 @@
       - '{{ "gtklock" if ansible_pkg_mgr != "dnf" else "curl" }}'
       - '{{ "docker" if ansible_pkg_mgr != "apt" else "curl" }}'
       - '{{ "docker-compose" if ansible_pkg_mgr != "apt" else "curl" }}'
+    state: present
   tags:
-    - install
-    - productivity
+      - install
+      - productivity
 
 # sudo groupadd docker
 - name: Create "docker" group
