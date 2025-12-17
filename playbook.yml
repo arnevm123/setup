@@ -39,7 +39,7 @@
     - include_tasks: tasks/baseApps.yml
     - include_tasks: tasks/flatpak.yml
     - include_tasks: tasks/sway.yml
-    - include_tasks: tasks/dotfiles.yml
     - include_tasks: tasks/manual.yml
     - include_tasks: tasks/golang.yml
+    - include_tasks: tasks/dotfiles.yml
     - include_tasks: tasks/nvim_plugins.yml
