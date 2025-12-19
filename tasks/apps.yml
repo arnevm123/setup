@@ -84,7 +84,6 @@
       - swaybg
       - wdisplays
       - swappy
-      - wl-present
       - wf-recorder
       - wlogout
     sway_packages_by_mgr:
