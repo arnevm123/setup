@@ -98,20 +98,23 @@
 - name: Install packages
   become: true
   ansible.builtin.package:
-    name: "{{ common_packages + (pkg_mgr_packages[ansible_pkg_mgr] | default([])) }}"
+    name: "{{ item }}"
     state: present
+  loop: "{{ common_packages + (pkg_mgr_packages[ansible_pkg_mgr] | default([])) }}"
 
 - name: Install languages
   become: true
   ansible.builtin.package:
-    name: "{{ language_packages_common + (language_packages_by_mgr[ansible_pkg_mgr] | default([])) }}"
+    name: "{{ item }}"
     state: present
+  loop: "{{ language_packages_common + (language_packages_by_mgr[ansible_pkg_mgr] | default([])) }}"
 
 - name: Install applications used for sway setup
   become: true
   ansible.builtin.package:
-    name: "{{ sway_packages_common + (sway_packages_by_mgr[ansible_pkg_mgr] | default([])) }}"
+    name: "{{ item }}"
     state: present
+  loop: "{{ sway_packages_common + (sway_packages_by_mgr[ansible_pkg_mgr] | default([])) }}"
 
 - name: Add Flathub remote
   become: true
