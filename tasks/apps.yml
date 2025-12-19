@@ -1,10 +1,9 @@
 - name: Enable required repositories
   ansible.builtin.include_tasks: tasks/enable-repositories.yml
 
-- name: Install packages
-  become: true
-  ansible.builtin.package:
-    name:
+- name: Define package list per package manager
+  ansible.builtin.set_fact:
+    common_packages:
       - flatpak
       - tmux
       - jq
@@ -15,47 +14,55 @@
       - htop
       - btop
       - lsof
-      - shutter
-      - openfortivpn
       - copyq
       - emacs
       - bat
       - git-delta
       - zoxide
       - thefuck
-      - fd-find
       - thunderbird
-      - '{{ "webkit2gtk4.0" if ansible_pkg_mgr != "apt" else "libwebkit2gtk-4.1-0" }}'
-      - '{{ "tldr" if ansible_pkg_mgr != "apt" else "tealdeer" }}'
-      - '{{ "firefox" if ansible_pkg_mgr != "apt" else "firefox-esr" }}'
-      - '{{ "gtklock" if ansible_pkg_mgr != "dnf" else "curl" }}'
-      - '{{ "docker" if ansible_pkg_mgr != "apt" else "docker-ce" }}'
-      - '{{ "docker-cli" if ansible_pkg_mgr != "apt" else "docker-ce-cli" }}'
-      - '{{ "docker-compose" if ansible_pkg_mgr != "apt" else "docker-compose-plugin" }}'
-      - containerd.io
-      - docker-buildx-plugin
-    state: present
+    pkg_mgr_packages:
+      apt:
+        - libwebkit2gtk-4.1-0
+        - tealdeer
+        - firefox-esr
+        - docker-ce
+        - docker-ce-cli
+        - docker-compose-plugin
+      dnf:
+        - webkit2gtk4.0
+        - tldr
+        - firefox
+        - docker
+        - docker-cli
+        - docker-compose
 
-- name: Install languages
-  become: true
-  ansible.builtin.package:
-    name:
+- name: Define language packages
+  ansible.builtin.set_fact:
+    language_packages_common:
       - nodejs
       - npm
       - shellcheck
       - luarocks
       - make
       - ansible-lint
-      - '{{ "python3-pip" if ansible_pkg_mgr != "pacman" else "python-pip" }}'
-      - '{{ "g++" if ansible_pkg_mgr != "pacman" else "gcc" }}'
-      - '{{ "sqlite" if ansible_pkg_mgr != "apt" else "sqlite3" }}'
-      - '{{ "sqlite-devel" if ansible_pkg_mgr != "apt" else "libsqlite3-dev" }}'
-      - '{{ "sqlite-tcl" if ansible_pkg_mgr != "apt" else "libsqlite3-tcl" }}'
+      - python3-pip
+    language_packages_by_mgr:
+      apt:
+        - g++
+        - sqlite3
+        - libsqlite3-dev
+        - libsqlite3-tcl
+      dnf:
+        - g++
+        - gcc-c++
+        - sqlite
+        - sqlite-devel
+        - sqlite-tcl
 
-- name: Install applications used for sway setup
-  become: true
-  ansible.builtin.package:
-    name:
+- name: Define sway packages
+  ansible.builtin.set_fact:
+    sway_packages_common:
       - sway
       - fuzzel
       - blueman
@@ -79,9 +86,31 @@
       - swappy
       - wl-present
       - wf-recorder
-      - '{{ "mako" if ansible_pkg_mgr != "apt" else "mako-notifier" }}'
-      - '{{ "SwayNotificationCenter" if ansible_pkg_mgr != "apt" else "sway-notification-center" }}'
-      - '{{ "wlogout" if ansible_pkg_mgr != "pacman" else "curl" }}'
+      - wlogout
+    sway_packages_by_mgr:
+      apt:
+        - mako-notifier
+        - sway-notification-center
+      dnf:
+        - mako
+        - SwayNotificationCenter
+
+- name: Install packages
+  become: true
+  ansible.builtin.package:
+    name: "{{ common_packages + (pkg_mgr_packages[ansible_pkg_mgr] | default([])) }}"
+    state: present
+
+- name: Install languages
+  become: true
+  ansible.builtin.package:
+    name: "{{ language_packages_common + (language_packages_by_mgr[ansible_pkg_mgr] | default([])) }}"
+    state: present
+
+- name: Install applications used for sway setup
+  become: true
+  ansible.builtin.package:
+    name: "{{ sway_packages_common + (sway_packages_by_mgr[ansible_pkg_mgr] | default([])) }}"
     state: present
 
 - name: Add Flathub remote
