@@ -88,6 +88,7 @@
       - wlogout
     sway_packages_by_mgr:
       apt:
+        - gtklock
         - mako-notifier
         - sway-notification-center
       dnf:
@@ -121,11 +122,17 @@
   register: flathubremote
   changed_when: flathubremote.rc != 0
 
-- name: Install Flathub packages
-  become: true
-  community.general.flatpak:
-    name:
+- name: Define package list per package manager
+  ansible.builtin.set_fact:
+    flathub_packages:
       - com.slack.Slack
       - com.wps.Office
       - com.spotify.Client
       - app/one.ablaze.floorp/x86_64/stable
+
+- name: Install Flathub packages
+  become: true
+  community.general.flatpak:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ flathub_packages }}"

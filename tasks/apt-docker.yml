@@ -1,14 +1,15 @@
-- name: Install packages
+- name: Install packages to add docker repository
   become: true
   ansible.builtin.apt:
     state: present
     install_recommends: false
-    pkg:
-      - bridge-utils
-      - ca-certificates
-      - curl
-      - gnupg
+    pkg: "{{ item }}"
     update_cache: true
+  loop:
+    - bridge-utils
+    - ca-certificates
+    - curl
+    - gnupg
 
 - name: Get architecture
   ansible.builtin.command: dpkg --print-architecture
