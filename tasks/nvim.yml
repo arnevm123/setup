@@ -1,0 +1,10 @@
+- name: Clone nvim config (latest)
+  ansible.builtin.git:
+    repo: git@github.com:arnevm123/vimsetup.git
+    dest: "{{ ansible_env.HOME }}/.config/nvim"
+    version: master
+    update: true
+
+- name: Install all plugins in neovim
+  ansible.builtin.command: '{{ lookup("env", "HOME") }}/.local/share/bob/nvim-bin/nvim --headless +"Lazy! sync" +qa'
+  changed_when: false

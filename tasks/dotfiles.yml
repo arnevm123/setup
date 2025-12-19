@@ -40,10 +40,6 @@
   ansible.builtin.shell: "cd {{ ansible_env.HOME }}/dotfiles && ./linux"
   changed_when: false
 
-- name: Get the master branch of my nvim config
-  ansible.builtin.shell: cd $HOME/.config/nvim && git checkout master
-  changed_when: false
-
 - name: Ensure keyd config directory exists
   become: true
   ansible.builtin.file:

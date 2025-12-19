@@ -30,4 +30,4 @@
       ansible.builtin.include_tasks: tasks/manual.yml
 
     - name: Install Neovim plugins
-      ansible.builtin.include_tasks: tasks/nvim_plugins.yml
+      ansible.builtin.include_tasks: tasks/nvim.yml
