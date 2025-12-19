@@ -1,6 +1,6 @@
 - name: Check if deno is installed
   changed_when: false
-  ansible.builtin.command: ~/.deno/bin/deno --version
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.deno/bin/deno --version"
   register: deno_exists
   ignore_errors: true
 

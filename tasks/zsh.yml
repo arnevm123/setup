@@ -13,7 +13,7 @@
 
 - name: Check that the oh my zsh folder exists
   ansible.builtin.stat:
-    path: ~/.oh-my-zsh
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
   register: ohmyzsh_dir
   changed_when: false
 
@@ -32,35 +32,35 @@
   when: not ohmyzsh_dir.stat.exists
   ansible.builtin.git:
     repo: 'https://github.com/hsaunders1904/pyautoenv.git'
-    dest: "~/.oh-my-zsh/plugins/pyautoenv"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/pyautoenv"
     force: true
 
 - name: Install zsh-autosuggestions # noqa: latest[git]
   when: not ohmyzsh_dir.stat.exists
   ansible.builtin.git:
     repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
-    dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/zsh-autosuggestions"
     force: true
 
 - name: Install zsh-z # noqa: latest[git]
   when: not ohmyzsh_dir.stat.exists
   ansible.builtin.git:
     repo: 'https://github.com/agkozak/zsh-z'
-    dest: "~/.oh-my-zsh/plugins/zsh-z"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/zsh-z"
     force: true
 
 - name: Install omz-git # noqa: latest[git]
   when: not ohmyzsh_dir.stat.exists
   ansible.builtin.git:
     repo: 'https://github.com/tnwinc/omz-git.git'
-    dest: "~/.oh-my-zsh/plugins/omz-git"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/omz-git"
     force: true
 
 - name: Install zsh-autosuggestions # noqa: latest[git]
   when: not ohmyzsh_dir.stat.exists
   ansible.builtin.git:
     repo: 'https://github.com/tnwinc/omz-git.git'
-    dest: "~/.oh-my-zsh/plugins/omz-git"
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/omz-git"
     force: true
 
 - name: Install zsh apikeys

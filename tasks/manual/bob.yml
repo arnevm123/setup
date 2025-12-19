@@ -1,15 +1,15 @@
 - name: Check if bob is installed
   changed_when: false
-  ansible.builtin.command: ~/.cargo/bin/bob --version
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/bob --version"
   register: bob_exists
   ignore_errors: true
 
 - name: Install bob
   when: bob_exists is failed
   changed_when: false
-  ansible.builtin.command: ~/.cargo/bin/cargo install wl-gammarelay-rs --locked
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/cargo install wl-gammarelay-rs --locked"
 
 - name: Install bob
   when: bob_exists is failed
   changed_when: false
-  ansible.builtin.command: ~/.cargo/bin/cargo install bob-nvim
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/cargo install bob-nvim"

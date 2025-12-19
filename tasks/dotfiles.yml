@@ -7,14 +7,14 @@
 - name: Clone dotfiles repository # noqa: latest[git]
   ansible.builtin.git:
     repo: https://github.com/arnevm123/dotfiles.git
-    dest: ~/dotfiles
+    dest: "{{ ansible_env.HOME }}/dotfiles"
     recursive: true
     force: true
 
 - name: Clone tpm repository # noqa: latest[git]
   ansible.builtin.git:
     repo: https://github.com/tmux-plugins/tpm
-    dest: ~/.tmux/plugins/tpm
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
     recursive: true
     force: true
 

@@ -1,6 +1,7 @@
 - name: Configure local development environment
   hosts: localhost
   vars:
+    # These contain the values that are encrypted using Ansible Vault
     source_ssh_key: "./.ssh/id_rsa"
     dest_ssh_key: "{{ ansible_env.HOME }}/.ssh/id_rsa"
 
@@ -9,7 +10,6 @@
 
     source_api: "./.zshexports"
     dest_api: "{{ ansible_env.HOME }}/.zshexports"
-
   tasks:
     - name: Set up SSH keys and config
       ansible.builtin.include_tasks: tasks/ssh.yml

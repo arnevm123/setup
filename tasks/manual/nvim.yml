@@ -3,4 +3,4 @@
 
 - name: Install neovim
   changed_when: false
-  ansible.builtin.command: ~/.cargo/bin/bob use stable
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/bob use stable"

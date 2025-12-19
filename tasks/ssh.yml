@@ -34,7 +34,7 @@
     state: present
     key: "{{ lookup('file', item) }}"
   with_fileglob:
-    - ~/.ssh/*.pub
+    - "{{ ansible_env.HOME }}/.ssh/*.pub"
 
 - name: Add github.com to known_hosts
   ansible.builtin.known_hosts:
