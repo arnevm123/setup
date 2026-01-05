@@ -19,3 +19,10 @@
 - name: Install gtklock on fedora
   ansible.builtin.include_tasks: tasks/manual/gtklock.yml
   when: "ansible_pkg_mgr == 'dnf'"
+
+- name: Install grove
+  ansible.builtin.command:
+    cmd: go install github.com/sqve/grove/cmd/grove@latest
+    creates: "{{ ansible_env.HOME }}/.gopath/bin/grove"
+  environment:
+    GOBIN: "{{ ansible_env.HOME }}/go/bin"
