@@ -1,9 +1,15 @@
-- name: Enable required repositories
-  ansible.builtin.include_tasks: tasks/enable-repositories.yml
+- name: Enable repositories on APT-based systems
+  ansible.builtin.include_tasks: tasks/apt-repos.yml
+  when: "ansible_pkg_mgr == 'apt'"
+
+- name: Enable repositories on dnf-based systems
+  ansible.builtin.include_tasks: tasks/dnf-repos.yml
+  when: "ansible_pkg_mgr == 'dnf'"
 
 - name: Define package list per package manager
   ansible.builtin.set_fact:
     common_packages:
+      - gh
       - flatpak
       - tmux
       - jq
