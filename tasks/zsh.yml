@@ -1,8 +1,9 @@
-- name: Install ZSH
+- name: Install zsh
   become: true
   ansible.builtin.package:
     name: zsh
     state: present
+    update_cache: true
   changed_when: false
 
 - name: Change shell to zsh for current user
