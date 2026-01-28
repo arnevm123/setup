@@ -13,3 +13,8 @@
   when: bob_exists is failed
   changed_when: false
   ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/cargo install bob-nvim"
+
+- name: Install tatum
+  when: bob_exists is failed
+  changed_when: false
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/cargo install --git https://github.com/elijah-potter/tatum --locked"
