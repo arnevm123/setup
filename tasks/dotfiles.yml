@@ -38,21 +38,3 @@
 - name: Stow dotfiles
   ansible.builtin.shell: "cd {{ ansible_env.HOME }}/dotfiles && ./linux"
   changed_when: false
-
-- name: Ensure keyd config directory exists
-  become: true
-  ansible.builtin.file:
-    path: /etc/keyd
-    state: directory
-    owner: root
-    group: root
-    mode: "0755"
-
-- name: Setup keyd config
-  become: true
-  ansible.builtin.copy:
-    src: "{{ ansible_env.HOME }}/dotfiles/keyd/default.conf"
-    dest: /etc/keyd/default.conf
-    owner: root
-    group: root
-    mode: "0644"

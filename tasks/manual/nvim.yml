@@ -1,3 +1,4 @@
 - name: Install neovim
-  changed_when: false
   ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/bob use stable"
+  args:
+    creates: "{{ ansible_env.HOME }}/.local/share/bob/nvim-bin/nvim"

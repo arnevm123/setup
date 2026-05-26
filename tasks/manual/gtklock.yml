@@ -1,5 +1,12 @@
 # only needed for fedora
+- name: Check if gtklock is installed
+  ansible.builtin.command: which gtklock
+  register: gtklock_check
+  changed_when: false
+  ignore_errors: true
+
 - name: Ensure build dependencies are installed
+  when: gtklock_check is failed
   become: true
   ansible.builtin.dnf:
     name:
@@ -13,64 +20,34 @@
       - pkgconf
       - scdoc
       - pam-devel
-      - wayland-devel
       - gtk3-devel
     state: present
     update_cache: true
 
-- name: Clone the gtk session lock repository (original)
+- name: Clone the gtk session lock repository
+  when: gtklock_check is failed
   ansible.builtin.git:
     repo: "https://github.com/Cu3PO42/gtk-session-lock.git"
     dest: "{{ ansible_env.HOME }}/Tools/gtk-session-lock"
     version: master
     force: true
 
-- name: Configure the build with meson
-  ansible.builtin.command: meson setup build
-  changed_when: false
+- name: Build and install gtk-session-lock
+  when: gtklock_check is failed
+  ansible.builtin.shell: meson setup build && ninja -C build && sudo ninja -C build install && sudo ldconfig
   args:
     chdir: "{{ ansible_env.HOME }}/Tools/gtk-session-lock"
 
-- name: Build gtklock
-  ansible.builtin.command: ninja -C build
-  changed_when: false
-  args:
-    chdir: "{{ ansible_env.HOME }}/Tools/gtk-session-lock"
-
-- name: Install gtklock
-  become: true
-  ansible.builtin.command: ninja -C build install
-  changed_when: false
-  args:
-    chdir: "{{ ansible_env.HOME }}/Tools/gtk-session-lock"
-
-- name: Ensure gtklock is in PATH (run ldconfig if necessary)
-  become: true
-  changed_when: false
-  ansible.builtin.command: ldconfig
-
-- name: Clone the gtklock repository (latest)
+- name: Clone the gtklock repository
+  when: gtklock_check is failed
   ansible.builtin.git:
     repo: "https://github.com/jovanlanik/gtklock.git"
     dest: "{{ ansible_env.HOME }}/Tools/gtklock"
     version: master
     force: true
 
-- name: Configure the build with meson
-  changed_when: false
-  ansible.builtin.command: meson setup builddir
-  args:
-    chdir: "{{ ansible_env.HOME }}/Tools/gtklock"
-
-- name: Build gtklock
-  changed_when: false
-  ansible.builtin.command: ninja -C builddir
-  args:
-    chdir: "{{ ansible_env.HOME }}/Tools/gtklock"
-
-- name: Install gtklock
-  become: true
-  changed_when: false
-  ansible.builtin.command: meson install -C builddir
+- name: Build and install gtklock
+  when: gtklock_check is failed
+  ansible.builtin.shell: meson setup builddir && ninja -C builddir && sudo meson install -C builddir
   args:
     chdir: "{{ ansible_env.HOME }}/Tools/gtklock"

@@ -140,3 +140,6 @@
     name: "{{ item }}"
     state: present
   loop: "{{ flathub_packages }}"
+
+- name: Set up Docker (group, user, service)
+  ansible.builtin.include_tasks: tasks/docker.yml

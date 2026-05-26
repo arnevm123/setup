@@ -14,5 +14,5 @@
 
 - name: Install deno
   when: deno_exists is failed
-  changed_when: false
+  changed_when: true
   ansible.builtin.command: /bin/bash /tmp/sh.deno.rs

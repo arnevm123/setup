@@ -41,3 +41,9 @@
     path: "{{ ansible_env.HOME }}/.ssh/known_hosts"
     name: github.com
     key: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
+
+- name: Install SSH config
+  ansible.builtin.copy:
+    src: "./.ssh/config"
+    dest: "{{ ansible_env.HOME }}/.ssh/config"
+    mode: '0600'

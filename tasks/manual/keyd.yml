@@ -1,25 +1,54 @@
+- name: Check if keyd is installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/keyd
+  register: keyd_binary
+
 - name: Clone the keyd repository
+  when: not keyd_binary.stat.exists
   become: true
-  git:
+  ansible.builtin.git:
     repo: https://github.com/rvaiya/keyd
     dest: /opt/keyd
     version: master
 
 - name: Make keyd trusted
+  when: not keyd_binary.stat.exists
+  changed_when: false
   ansible.builtin.command: >
     git config --global --add safe.directory /opt/keyd
 
-- name: Compile and install keyd
+- name: Build keyd
+  when: not keyd_binary.stat.exists
   become: true
-  ansible.builtin.command: sudo make
+  ansible.builtin.command: make
   args:
     chdir: /opt/keyd
 
-- name: Compile and install keyd
+- name: Install keyd
+  when: not keyd_binary.stat.exists
   become: true
-  ansible.builtin.command: sudo make install
+  ansible.builtin.command: make install
   args:
     chdir: /opt/keyd
+
+- name: Ensure keyd config directory exists
+  become: true
+  ansible.builtin.file:
+    path: /etc/keyd
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Setup keyd config
+  become: true
+  ansible.builtin.copy:
+    src: "{{ ansible_env.HOME }}/dotfiles/keyd/default.conf"
+    dest: /etc/keyd/default.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: restart keyd
 
 - name: Enable and start keyd service
   become: true

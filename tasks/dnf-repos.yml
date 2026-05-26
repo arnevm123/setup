@@ -1,20 +1,21 @@
 - name: Install dnf5 plugins
+  become: true
   ansible.builtin.dnf:
     name: dnf5-plugins
     state: present
-  changed_when: true
 
 - name: Add GitHub CLI repository
+  become: true
   ansible.builtin.yum_repository:
     name: gh-cli
     description: GitHub CLI
     baseurl: https://cli.github.com/packages/rpm/
     enabled: true
     gpgcheck: true
-    gpgkey: https://cli.github.com/packages/rpm/gh-cli.repo
-  changed_when: true
+    gpgkey: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x23F3D4EA75716059
 
-- name: Enable Copr repository
+- name: Enable Copr repository for SwayNotificationCenter
   become: true
   ansible.builtin.command: dnf copr enable -y erikreider/SwayNotificationCenter
-  changed_when: true
+  args:
+    creates: /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:erikreider:SwayNotificationCenter.repo

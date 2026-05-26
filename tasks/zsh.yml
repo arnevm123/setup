@@ -4,7 +4,6 @@
     name: zsh
     state: present
     update_cache: true
-  changed_when: false
 
 - name: Change shell to zsh for current user
   become: true
@@ -51,13 +50,6 @@
     force: true
 
 - name: Install omz-git # noqa: latest[git]
-  when: not ohmyzsh_dir.stat.exists
-  ansible.builtin.git:
-    repo: 'https://github.com/tnwinc/omz-git.git'
-    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/plugins/omz-git"
-    force: true
-
-- name: Install zsh-autosuggestions # noqa: latest[git]
   when: not ohmyzsh_dir.stat.exists
   ansible.builtin.git:
     repo: 'https://github.com/tnwinc/omz-git.git'

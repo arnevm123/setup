@@ -14,9 +14,6 @@
     - name: Set up SSH keys and config
       ansible.builtin.include_tasks: tasks/ssh.yml
 
-    - name: Set up git
-      ansible.builtin.include_tasks: tasks/git.yml
-
     - name: Set up ZSH
       ansible.builtin.include_tasks: tasks/zsh.yml
 
