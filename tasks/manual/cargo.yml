@@ -1,0 +1,19 @@
+- name: Get list of installed cargo packages
+  changed_when: false
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/cargo install --list"
+  register: cargo_installed
+
+- name: Install bob
+  when: "'bob-nvim' not in cargo_installed.stdout"
+  changed_when: true
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/cargo install bob-nvim"
+
+- name: Install tatum (markdown renderer used in nvim)
+  when: "'tatum' not in cargo_installed.stdout"
+  changed_when: true
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/cargo install --git https://github.com/elijah-potter/tatum --locked"
+
+- name: Install shmooz
+  when: "'shmooz' not in cargo_installed.stdout"
+  changed_when: true
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/cargo install --git https://github.com/chmouel/shmooz --locked"
