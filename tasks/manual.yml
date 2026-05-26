@@ -13,6 +13,9 @@
 - name: Install rust
   ansible.builtin.include_tasks: tasks/manual/rust.yml
 
+- name: Install cargo packages
+  ansible.builtin.include_tasks: tasks/manual/cargo.yml
+
 - name: Install nvim
   ansible.builtin.include_tasks: tasks/manual/nvim.yml
 

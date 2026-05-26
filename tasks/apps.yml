@@ -21,11 +21,9 @@
       - btop
       - lsof
       - copyq
-      - emacs
       - bat
       - git-delta
       - zoxide
-      - thefuck
       - thunderbird
     pkg_mgr_packages:
       apt:
