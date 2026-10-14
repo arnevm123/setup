@@ -126,7 +126,7 @@
   register: flathubremote
   changed_when: flathubremote.rc != 0
 
-- name: Define package list per package manager
+- name: Define flathub package list
   ansible.builtin.set_fact:
     flathub_packages:
       - com.slack.Slack
