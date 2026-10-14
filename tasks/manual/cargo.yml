@@ -17,3 +17,20 @@
   when: "'shmooz' not in cargo_installed.stdout"
   changed_when: true
   ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/cargo install --git https://github.com/chmouel/shmooz --locked"
+
+- name: Install difftastic (structural diff used by git)
+  when: "'difftastic' not in cargo_installed.stdout"
+  changed_when: true
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/cargo install difftastic --locked"
+
+- name: Install stylua (lua formatter used by nvim)
+  when: "'stylua' not in cargo_installed.stdout"
+  changed_when: true
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/cargo install stylua --locked"
+
+# fsel only publishes pre-release versions, so pin one explicitly (cargo will
+# not select a pre-release for the implicit "*" requirement).
+- name: Install fsel (app launcher / clipboard picker used by sway)
+  when: "'fsel' not in cargo_installed.stdout"
+  changed_when: true
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.cargo/bin/cargo install fsel --version 3.3.0-kiwicrab"

@@ -38,3 +38,8 @@
 - name: Stow dotfiles
   ansible.builtin.shell: "cd {{ ansible_env.HOME }}/dotfiles && ./linux"
   changed_when: false
+
+- name: Install tmux plugins
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.tmux/plugins/tpm/bin/install_plugins"
+  args:
+    creates: "{{ ansible_env.HOME }}/.tmux/plugins/extrakto"

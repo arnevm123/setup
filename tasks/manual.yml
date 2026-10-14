@@ -10,6 +10,21 @@
 - name: Install deno
   ansible.builtin.include_tasks: tasks/manual/deno.yml
 
+- name: Install nvm and Node.js
+  ansible.builtin.include_tasks: tasks/manual/nvm.yml
+
+- name: Install global npm packages
+  ansible.builtin.include_tasks: tasks/manual/npm.yml
+
+- name: Install cclip
+  ansible.builtin.include_tasks: tasks/manual/cclip.yml
+
+- name: Install hl
+  ansible.builtin.include_tasks: tasks/manual/hl.yml
+
+- name: Install claude
+  ansible.builtin.include_tasks: tasks/manual/claude.yml
+
 - name: Install rust
   ansible.builtin.include_tasks: tasks/manual/rust.yml
 
