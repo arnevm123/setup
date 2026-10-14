@@ -1,0 +1,29 @@
+- name: Check if nvm is installed
+  changed_when: false
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+  register: nvm_script
+
+- name: Clone nvm repository # noqa: latest[git]
+  when: not nvm_script.stat.exists
+  ansible.builtin.git:
+    repo: https://github.com/nvm-sh/nvm.git
+    dest: "{{ ansible_env.HOME }}/.nvm"
+    version: master
+    update: false
+
+- name: Check if Node.js is installed via nvm
+  changed_when: false
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.nvm/versions/node"
+  register: nvm_node_versions
+
+- name: Install Node.js LTS via nvm
+  when: not nvm_node_versions.stat.exists
+  changed_when: true
+  ansible.builtin.shell: |
+    set -e
+    source "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+    nvm install --lts
+  args:
+    executable: /bin/bash

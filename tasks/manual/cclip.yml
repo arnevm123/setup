@@ -1,0 +1,62 @@
+# cclip is not packaged on Debian or Fedora, build it from source.
+- name: Check if cclip is installed
+  changed_when: false
+  ansible.builtin.command: which cclip
+  register: cclip_check
+  ignore_errors: true
+
+- name: Define cclip build dependencies per package manager
+  ansible.builtin.set_fact:
+    cclip_build_deps:
+      apt:
+        - meson
+        - ninja-build
+        - pkg-config
+        - libwayland-dev
+        - libwayland-bin
+        - libsqlite3-dev
+        - libxxhash-dev
+      dnf:
+        - meson
+        - ninja-build
+        - pkgconf-pkg-config
+        - wayland-devel
+        - sqlite-devel
+        - xxhash-devel
+
+- name: Ensure cclip build dependencies are installed
+  when: cclip_check is failed
+  become: true
+  ansible.builtin.package:
+    name: "{{ cclip_build_deps[ansible_pkg_mgr] | default([]) }}"
+    state: present
+
+- name: Clone the cclip repository
+  when: cclip_check is failed
+  ansible.builtin.git:
+    repo: https://github.com/heather7283/cclip.git
+    dest: "{{ ansible_env.HOME }}/Tools/cclip"
+    version: master
+    force: true
+
+- name: Configure cclip
+  when: cclip_check is failed
+  changed_when: true
+  ansible.builtin.command:
+    cmd: meson setup --buildtype=release build
+    chdir: "{{ ansible_env.HOME }}/Tools/cclip"
+
+- name: Compile cclip
+  when: cclip_check is failed
+  changed_when: true
+  ansible.builtin.command:
+    cmd: meson compile -C build
+    chdir: "{{ ansible_env.HOME }}/Tools/cclip"
+
+- name: Install cclip
+  when: cclip_check is failed
+  become: true
+  changed_when: true
+  ansible.builtin.command:
+    cmd: meson install -C build
+    chdir: "{{ ansible_env.HOME }}/Tools/cclip"

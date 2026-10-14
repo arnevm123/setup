@@ -1,0 +1,31 @@
+- name: Get list of globally installed npm packages
+  changed_when: false
+  ansible.builtin.shell: |
+    source "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+    npm ls -g --depth=0
+  args:
+    executable: /bin/bash
+  register: npm_globals
+
+- name: Install global npm packages
+  when: item not in npm_globals.stdout
+  changed_when: true
+  ansible.builtin.shell: |
+    source "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+    npm install -g {{ item }}
+  args:
+    executable: /bin/bash
+  loop:
+    - cspell
+    - eslint_d
+    - commitizen
+    - cz-conventional-changelog
+    - "@bitwarden/cli"
+    - "@genql/cli"
+    - "@github/copilot"
+    - "@google/gemini-cli"
+    - "@openapitools/openapi-generator-cli"
+    - "@usebruno/cli"
+    - firecrawl-cli
+    - opencode-agent-tmux
+    - opentmux

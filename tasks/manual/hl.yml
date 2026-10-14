@@ -1,0 +1,31 @@
+# hl (https://github.com/pamburus/hl) is not on crates.io under this name,
+# install the prebuilt release binary instead.
+- name: Check if hl is installed
+  changed_when: false
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.local/bin/hl"
+  register: hl_binary
+
+- name: Set hl release architecture
+  ansible.builtin.set_fact:
+    hl_arch: "{{ 'aarch64' if ansible_architecture == 'aarch64' else 'x86_64' }}"
+
+- name: Download hl (log viewer used by the HL alias)
+  when: not hl_binary.stat.exists
+  ansible.builtin.get_url:
+    url: "https://github.com/pamburus/hl/releases/latest/download/hl-linux-{{ hl_arch }}-musl.tar.gz"
+    dest: /tmp/hl.tar.gz
+    mode: '0644'
+
+- name: Ensure ~/.local/bin exists
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/.local/bin"
+    state: directory
+    mode: '0755'
+
+- name: Extract hl
+  when: not hl_binary.stat.exists
+  ansible.builtin.unarchive:
+    src: /tmp/hl.tar.gz
+    dest: "{{ ansible_env.HOME }}/.local/bin"
+    remote_src: true
